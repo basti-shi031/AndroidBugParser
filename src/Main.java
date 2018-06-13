@@ -49,6 +49,7 @@ public class Main {
 //                        for (BugInfo bug : bugs) {
 //                            bugDao.createOrUpdate(bug);
 //                        }
+                        //存在主键相同的情况，不能直接create
                         //   bugDao.create(bugs);
                         total += bugs.size();
                         System.out.println(String.format("  读取%d个bug", bugs.size()));
