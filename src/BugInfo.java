@@ -28,6 +28,8 @@ public class BugInfo {
      * updated : 2018-01-05 09:18:16.000000000
      * status : MERGED
      */
+    @DatabaseField(generatedId = true)
+    private int uid;
     @DatabaseField
     private int _number;
     //    private OwnerEntity owner;
@@ -55,15 +57,64 @@ public class BugInfo {
     private int unresolved_comment_count;
     @DatabaseField
     private String topic;
-    @DatabaseField(id = true)
+    @DatabaseField
     private String id;//主键
     @DatabaseField
     private String updated;
     @DatabaseField
     private String status;
+    @DatabaseField
+    private int checked;
+    @DatabaseField
+    private int note;
+    @DatabaseField
+    private String title;
+    @DatabaseField
+    private String des;
 
 
     public BugInfo() {
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public int getChecked() {
+        return checked;
+    }
+
+    public void setChecked(int checked) {
+        this.checked = checked;
+    }
+
+    public int getNote() {
+        return note;
+    }
+
+    public void setNote(int note) {
+        this.note = note;
     }
 
     public void set_number(int _number) {

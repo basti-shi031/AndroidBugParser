@@ -16,16 +16,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
-        // this uses h2 by default but change to match your database
-       // String databaseUrl = "jdbc:mysql://10.131.252.160/android_bug.db";
-        String databaseUrl = "jdbc:mysql://10.131.252.160/android_bug";
-        JdbcConnectionSource connection = new JdbcConnectionSource(databaseUrl);
-        connection.setUsername("root");
-        connection.setPassword("root");
-        // create a connection source to our database
-       /* ConnectionSource connectionSource =
-                new JdbcConnectionSource(databaseUrl);*/
+    public static void main(String[] args) throws SQLException, IOException {
+
+        //sqlite
+        //ConnectionSource connection = setupSqlite();
+        //mysql
+        JdbcConnectionSource connection = setupMySql();
 
         Dao<BugInfo, String> bugDao = DaoManager.createDao(connection, BugInfo.class);
         if (!bugDao.isTableExists()) {
@@ -50,11 +46,11 @@ public class Main {
                         //规范格式
                         //转化为Bean
                         List<BugInfo> bugs = format(content);
-                        for (BugInfo bug : bugs) {
+                  /*      for (BugInfo bug : bugs) {
                             bugDao.createOrUpdate(bug);
-                        }
+                        }*/
                         //存在主键相同的情况，不能直接create
-                        //   bugDao.create(bugs);
+                        bugDao.create(bugs);
                         total += bugs.size();
                         System.out.println(String.format("  读取%d个bug", bugs.size()));
                         System.out.println("    ================================================");
@@ -62,8 +58,25 @@ public class Main {
                 }
             }
         }
+        connection.close();
         System.out.println(total);
 
+    }
+
+    private static JdbcConnectionSource setupMySql() throws SQLException {
+        String databaseUrl = String.format("jdbc:mysql://%s/android_bug",Config.IP);
+        JdbcConnectionSource connection = new JdbcConnectionSource(databaseUrl);
+        connection.setUsername(Config.USERNAME);
+        connection.setPassword(Config.PASSWORD);
+
+        return connection;
+    }
+
+    private static ConnectionSource setupSqlite() throws SQLException {
+        String databaseUrl = "jdbc:sqlite:android_bug.db";
+        ConnectionSource connectionSource =
+                new JdbcConnectionSource(databaseUrl);
+        return connectionSource;
     }
 
     private static String readFile(File file) {
