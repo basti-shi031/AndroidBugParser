@@ -39,7 +39,7 @@ public class BugInfo {
     private int insertions;
     @DatabaseField
     private int deletions;
-    @DatabaseField
+    @DatabaseField(width=3000)
     private String subject;
     @DatabaseField
     private String created;

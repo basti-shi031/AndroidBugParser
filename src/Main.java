@@ -18,14 +18,18 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws SQLException {
         // this uses h2 by default but change to match your database
-        String databaseUrl = "jdbc:sqlite:android_bug.db";
+       // String databaseUrl = "jdbc:mysql://10.131.252.160/android_bug.db";
+        String databaseUrl = "jdbc:mysql://10.131.252.160/android_bug";
+        JdbcConnectionSource connection = new JdbcConnectionSource(databaseUrl);
+        connection.setUsername("root");
+        connection.setPassword("root");
         // create a connection source to our database
-        ConnectionSource connectionSource =
-                new JdbcConnectionSource(databaseUrl);
+       /* ConnectionSource connectionSource =
+                new JdbcConnectionSource(databaseUrl);*/
 
-        Dao<BugInfo, String> bugDao = DaoManager.createDao(connectionSource, BugInfo.class);
+        Dao<BugInfo, String> bugDao = DaoManager.createDao(connection, BugInfo.class);
         if (!bugDao.isTableExists()) {
-            TableUtils.createTable(connectionSource, BugInfo.class);
+            TableUtils.createTable(connection, BugInfo.class);
         }
         //文件根路径
         String path = args[0];
@@ -46,9 +50,9 @@ public class Main {
                         //规范格式
                         //转化为Bean
                         List<BugInfo> bugs = format(content);
-//                        for (BugInfo bug : bugs) {
-//                            bugDao.createOrUpdate(bug);
-//                        }
+                        for (BugInfo bug : bugs) {
+                            bugDao.createOrUpdate(bug);
+                        }
                         //存在主键相同的情况，不能直接create
                         //   bugDao.create(bugs);
                         total += bugs.size();
